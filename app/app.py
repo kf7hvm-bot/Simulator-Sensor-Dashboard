@@ -1,6 +1,6 @@
 import reflex as rx
 import reflex_enterprise as rxe
-from app.state import periodic_data_generation
+from app.state import SensorState, periodic_data_generation
 from app.components.data_grid import data_grid
 from app.components.line_chart import line_chart
 
@@ -38,6 +38,7 @@ def index() -> rx.Component:
             class_name="container mx-auto p-4 md:p-8",
         ),
         class_name="w-full min-h-screen bg-gray-50 font-['Inter']",
+        on_mount=SensorState.refresh_data,
     )
 
 

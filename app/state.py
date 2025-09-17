@@ -66,9 +66,20 @@ async def periodic_data_generation():
 
 
 class SensorState(rx.State):
+    _trigger: int = 0
+
+    @rx.event(background=True)
+    async def refresh_data(self):
+        """Periodically triggers a re-render of the UI to show new data."""
+        while True:
+            await asyncio.sleep(1)
+            async with self:
+                self._trigger += 1
+
     @rx.var
     def chart_data(self) -> list[dict[str, float | str]]:
         """Prepares data for the line chart, showing the last 10 readings per sensor."""
+        _ = self._trigger
         if not GLOBAL_SENSOR_DATA:
             return []
         grouped_by_time = {}
@@ -83,6 +94,7 @@ class SensorState(rx.State):
     @rx.var
     def latest_readings(self) -> list[SensorReading]:
         """Returns the most recent reading for each sensor."""
+        _ = self._trigger
         if not GLOBAL_SENSOR_DATA:
             return []
         return GLOBAL_SENSOR_DATA[-INITIAL_SENSORS:]
