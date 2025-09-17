@@ -72,7 +72,7 @@ class SensorState(rx.State):
     async def refresh_data(self):
         """Periodically triggers a re-render of the UI to show new data."""
         while True:
-            await asyncio.sleep(1)
+            await asyncio.sleep(10)
             async with self:
                 self._trigger += 1
 
